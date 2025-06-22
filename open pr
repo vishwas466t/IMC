@@ -1,0 +1,50 @@
+#cell 1
+from webdriver_manager.chrome import ChromeDriverManager
+
+driver_path = ChromeDriverManager().install()
+print("ChromeDriver is located at:", driver_path)
+
+#cell 2
+
+
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+# Correct path to chromedriver.exe
+chromedriver_path = r"C:\Users\vishw\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32\chromedriver.exe"
+
+options = Options()
+options.add_argument("--start-maximized")  # Open browser maximized
+
+cService = Service(executable_path=chromedriver_path)
+driver = webdriver.Chrome(service=cService, options=options)
+driver.get('https://www.openpr.com/')
+
+# Wait for and click the reject cookies button
+reject = WebDriverWait(driver, 10).until(
+    EC.element_to_be_clickable((By.XPATH, '//*[@id="cmpbntnotxt"]'))
+)
+reject.click()
+
+# Wait for and click the submit button
+submit = WebDriverWait(driver, 10).until(
+    EC.element_to_be_clickable((By.XPATH, '//*[@id="navbarText"]/ul/li[3]/a'))
+)
+submit.click()
+
+# Wait for the input box, clear it, and send text
+input_box = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.XPATH, '//*[@id="code"]'))
+)
+input_box.clear()
+input_box.send_keys("AGC-2025-MBJEE9")  # Replace with your desired input
+
+# Wait for and click the final submit button
+submit2 = WebDriverWait(driver, 10).until(
+    EC.element_to_be_clickable((By.XPATH, '//*[@id="main"]/div/div/div[4]/div/form/button'))
+)
+submit2.click()
